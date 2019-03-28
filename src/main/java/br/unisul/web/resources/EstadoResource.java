@@ -3,6 +3,7 @@ package br.unisul.web.resources;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,25 +14,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.unisul.web.domain.Categoria;
-import br.unisul.web.dtos.CategoriaDto;
-import br.unisul.web.services.CategoriaService;
+import br.unisul.web.domain.Cidade;
+import br.unisul.web.domain.Estado;
+import br.unisul.web.dtos.CidadeDto;
+import br.unisul.web.dtos.EstadoDto;
+import br.unisul.web.services.CidadeService;
+import br.unisul.web.services.EstadoService;
 
 @RestController
-@RequestMapping(value="/categorias")
-public class CategoriaResource {
+@RequestMapping(value="/estados")
+public class EstadoResource {
 	
 	@Autowired
-	private CategoriaService service;
+	private EstadoService service;
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public ResponseEntity<Categoria> find(@PathVariable Integer id){
-		Categoria obj = service.find(id);
+	public ResponseEntity<Estado> find(@PathVariable Integer id){
+		Estado obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void>insert(@RequestBody Categoria obj){
+	public ResponseEntity<Void>insert(@RequestBody Estado obj){
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
 				path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -39,7 +43,7 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@RequestBody Estado obj, @PathVariable Integer id){
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
@@ -52,15 +56,25 @@ public class CategoriaResource {
 	}
 		
 	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<CategoriaDto>> findAll() {
-		List<Categoria> lista = service.findAll();
+	public ResponseEntity<List<EstadoDto>> findAll() {
+		List<Estado> lista = service.findAll();
 		
-		List<CategoriaDto> listDto = new ArrayList<CategoriaDto>();
+		List<EstadoDto> listDto = new ArrayList<EstadoDto>();
 		
-		for (Categoria c : lista) {
-			listDto.add(new CategoriaDto(c));
+		for (Estado c : lista) {
+			listDto.add(new EstadoDto(c));
 		}
 		
+		return ResponseEntity.ok().body(listDto);
+	}
+	
+	@Autowired
+	private CidadeService cidadeService;
+
+	@RequestMapping(value="/{estadoId}/cidades", method=RequestMethod.GET)
+	public ResponseEntity<List<CidadeDto>> findCidades(@PathVariable Integer estadoId) {
+		List<Cidade> list = cidadeService.findByEstado(estadoId);
+		List<CidadeDto> listDto = list.stream().map(obj -> new CidadeDto(obj)).collect(Collectors.toList());  
 		return ResponseEntity.ok().body(listDto);
 	}
 }
