@@ -8,10 +8,15 @@ import org.springframework.stereotype.Service;
 
 import br.unisul.web.domain.Categoria;
 import br.unisul.web.domain.Cidade;
+import br.unisul.web.domain.Cliente;
+import br.unisul.web.domain.Endereco;
 import br.unisul.web.domain.Estado;
 import br.unisul.web.domain.Produto;
+import br.unisul.web.domain.enums.TipoCliente;
 import br.unisul.web.repositories.CategoriaRepository;
 import br.unisul.web.repositories.CidadeRepository;
+import br.unisul.web.repositories.ClienteRepository;
+import br.unisul.web.repositories.EnderecoRepository;
 import br.unisul.web.repositories.EstadoRepository;
 import br.unisul.web.repositories.ProdutoRepository;
 
@@ -29,6 +34,12 @@ public class DbService {
 	
 	@Autowired
 	private CidadeRepository cidRep;
+	
+	@Autowired
+	private EnderecoRepository endRep;
+	
+	@Autowired
+	private ClienteRepository cliRep;
 	
 	public void inicializaBancoDeDados() throws ParseException {
 		
@@ -69,6 +80,15 @@ public class DbService {
 		
 		catRep.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		prodRep.saveAll(Arrays.asList(p1,p2,p3));
+		
+		Cliente cliente = new Cliente(null, "Lucgsdas", "lucgsds@hotgsdmail.com", "110011dsg0010", 
+				TipoCliente.PESSOAFISICA);		
+		
+		Endereco endereco = new Endereco(null, "Rua faskfja fsiAlice da Sfsailva", "343", "Sfasupfasfaerfasmercado Lídfassfaaer", "Rgsgsdio Bfofsfnito", "00000*0", cliente, c1);
+		Endereco endereco1 = new Endereco(null, "Av Mdarechal Deodoradfaso", "31", "Lgdsojas Benoiftsgg", "Cesdhnhdftro", "000000", cliente, c2);
+		
+		cliRep.saveAll(Arrays.asList(cliente));
+		endRep.saveAll(Arrays.asList(endereco, endereco1));
 	}
 
 }
