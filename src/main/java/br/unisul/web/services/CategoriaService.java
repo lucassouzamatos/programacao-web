@@ -38,4 +38,9 @@ public class CategoriaService {
 	public List<Categoria> findAll(){
 		return rep.findAll();
 	}
+	
+	public List<Categoria> findByNome(String nome) {
+		List<Categoria> list = rep.findLikeNome(nome);
+		return list;
+	}
 }
