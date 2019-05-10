@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.unisul.web.domain.Categoria;
 import br.unisul.web.dtos.CategoriaDto;
+import br.unisul.web.resources.utils.URL;
 import br.unisul.web.services.CategoriaService;
 
 @RestController
@@ -67,7 +68,7 @@ public class CategoriaResource {
 	
 	@RequestMapping(value="/busca",method=RequestMethod.GET)
 	public ResponseEntity<List<Categoria>> find(@RequestParam(value="nome", defaultValue="") String nome) {
-		List<Categoria> list = service.findByNome(nome);
+		List<Categoria> list = service.findByNome(URL.decodeParam(nome));
 		return ResponseEntity.ok().body(list);
 	}
 }
