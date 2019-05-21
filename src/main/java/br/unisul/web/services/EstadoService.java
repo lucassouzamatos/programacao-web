@@ -38,4 +38,9 @@ public class EstadoService {
 	public List<Estado> findAll(){
 		return rep.findAll();
 	}
+	
+	public List<Estado> findByNome(String nome) {
+		List<Estado> list = rep.findLikeNome(nome);
+		return list;
+	}
 }

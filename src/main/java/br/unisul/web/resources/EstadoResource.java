@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,6 +19,7 @@ import br.unisul.web.domain.Cidade;
 import br.unisul.web.domain.Estado;
 import br.unisul.web.dtos.CidadeDto;
 import br.unisul.web.dtos.EstadoDto;
+import br.unisul.web.resources.utils.URL;
 import br.unisul.web.services.CidadeService;
 import br.unisul.web.services.EstadoService;
 
@@ -66,6 +68,12 @@ public class EstadoResource {
 		}
 		
 		return ResponseEntity.ok().body(listDto);
+	}
+	
+	@RequestMapping(value="/busca",method=RequestMethod.GET)
+	public ResponseEntity<List<Estado>> find(@RequestParam(value="nome", defaultValue="") String nome) {
+		List<Estado> list = service.findByNome(URL.decodeParam(nome));
+		return ResponseEntity.ok().body(list);
 	}
 	
 	@Autowired
