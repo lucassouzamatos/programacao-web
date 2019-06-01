@@ -15,6 +15,10 @@ import br.unisul.web.services.ProdutoService;
 import br.unisul.web.domain.Produto;
 import br.unisul.web.dtos.ProdutoDto;
 import br.unisul.web.resources.utils.URL;
+import java.net.URI;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 @RestController
 @RequestMapping(value = "/produtos")
@@ -44,5 +48,14 @@ public class ProdutoResource {
 		}
 		return ResponseEntity.ok().body(listDto);
 
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Produto> create(@RequestBody Produto produto) {
+		produto = service.create(produto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
+				path("/{id}").buildAndExpand(produto.getId()).toUri();
+
+		return ResponseEntity.created(uri).build();
 	}
 }

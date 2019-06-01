@@ -29,4 +29,8 @@ public class ProdutoService {
 		List<Categoria> categorias = categoriaRepository.findAllById(ids);
 		return rep.findDistinctByNomeContainingAndCategoriasIn(nome, categorias);
 	}
+	
+	public Produto create(Produto produto) {
+		return rep.save(produto);
+	}
 }
